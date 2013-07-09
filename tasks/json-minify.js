@@ -12,7 +12,7 @@ module.exports = function(grunt) {
     var totalInBytes = 0;
     var totalOutBytes = 0;
     var totalProfitPercents = 0;
-    var files = grunt.file.expand(this.data.files);
+    var files = this.files;//grunt.file.expand(this.data.files);
 
     function calcCompression(inBytes, outBytes) {
       var profitPercents = 100 - outBytes * 100 / inBytes;
@@ -21,7 +21,9 @@ module.exports = function(grunt) {
         (Math.round((outBytes / 1024) * 1000) / 1000) + ' KiB';
     }
 
-    files.forEach(function(filepath) {
+    files.forEach(function(file) {
+	  var filepath = file.src;
+	  var dest = file.dest;
       var data = grunt.file.read(filepath);
       var compressed;
 
@@ -31,7 +33,7 @@ module.exports = function(grunt) {
         grunt.fail.warn(err);
       }
 
-      grunt.file.write(filepath, compressed);
+      grunt.file.write(dest, compressed);
 
       // and print profit info
       grunt.log.writeln('File "' + filepath + '":');
